@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 
 import { Flex } from 'dreampact';
 
-import useEditor from '../../../hooks/useEditor';
+import { useEditor } from '../../hooks';
 
 import {
   ToggleEditModeStyle,

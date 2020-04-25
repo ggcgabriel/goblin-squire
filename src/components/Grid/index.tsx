@@ -1,25 +1,19 @@
 import React, { memo } from 'react';
 
-import { useWindowSize } from 'dreampact';
+import { Layer } from 'react-konva';
 
-import { Stage, Layer } from 'react-konva';
-import Konva from 'konva';
+import { Rectangle, Circle, Text, Image } from './shapes';
 
-import { Rectangle, Circle, Text } from './shapes';
-
+import MainStage from './MainStage';
 import GridLayer from './GridLayer';
-import Toolbar from './Toolbar';
-import ToggleEditMode from './ToggleEditMode';
 
-import GridStyle from './styles';
+import { GridStyle } from './styles';
 
-import useEditor from '../../hooks/useEditor';
+import { useEditor } from '../../hooks';
 
 function Grid() {
-  const { width, height } = useWindowSize();
-
   const {
-    nodes: { circles, rectangles, texts },
+    nodes: { circles, rectangles, texts, images },
     isSelected,
     deleteShape,
     selectShape,
@@ -28,32 +22,15 @@ function Grid() {
     selectedShape,
   } = useEditor();
 
-  const checkDeselect = (
-    e: Konva.KonvaEventObject<MouseEvent> | Konva.KonvaEventObject<TouchEvent>
-  ) => {
-    // deselect when clicked on empty area
-    const clickedOnEmpty = e.target === e.target.getStage();
-    if (clickedOnEmpty && selectedShape !== undefined) {
-      unselectShape();
-    }
-  };
-
   return (
     <GridStyle>
-      <Toolbar />
-      <Stage
-        width={width}
-        height={height}
-        onMouseDown={checkDeselect}
-        onTouchStart={checkDeselect}
-      >
-        <GridLayer />
+      <MainStage unselectShape={unselectShape} selectedShape={selectedShape}>
         <Layer>
-          {rectangles.map((rect, i) => {
+          {rectangles.map((rect) => {
             return (
               <Rectangle
-                key={rect.id}
-                shapeProps={rect}
+                key={rect.getAttrs().id}
+                shapeProps={rect.getAttrs()}
                 deleteShape={deleteShape}
                 isSelected={isSelected}
                 selectShape={selectShape}
@@ -62,11 +39,11 @@ function Grid() {
             );
           })}
 
-          {circles.map((circle, i) => {
+          {circles.map((circle) => {
             return (
               <Circle
-                key={circle.id}
-                shapeProps={circle}
+                key={circle.getAttrs().id}
+                shapeProps={circle.getAttrs()}
                 deleteShape={deleteShape}
                 isSelected={isSelected}
                 selectShape={selectShape}
@@ -75,11 +52,24 @@ function Grid() {
             );
           })}
 
-          {texts.map((text, i) => {
+          {texts.map((text) => {
             return (
               <Text
-                key={text.id}
-                shapeProps={text}
+                key={text.getAttrs().id}
+                shapeProps={text.getAttrs()}
+                deleteShape={deleteShape}
+                isSelected={isSelected}
+                selectShape={selectShape}
+                updateShape={updateShape}
+              />
+            );
+          })}
+
+          {images.map((image) => {
+            return (
+              <Image
+                key={image.getAttrs().id}
+                shapeProps={image.getAttrs()}
                 deleteShape={deleteShape}
                 isSelected={isSelected}
                 selectShape={selectShape}
@@ -88,10 +78,11 @@ function Grid() {
             );
           })}
         </Layer>
-      </Stage>
-      <ToggleEditMode />
+        <GridLayer />
+      </MainStage>
     </GridStyle>
   );
 }
 
 export default memo(Grid);
+export * from './styles';

@@ -13,12 +13,12 @@ export type TextOnChangeEvent = {
 export type TextProps = {
   selectShape: (
     shapeId: string | undefined,
-    config: Konva.RectConfig,
+    config: Konva.Text,
     shapeType: ShapeTypes
   ) => void;
   updateShape: (
     shapeId: string | undefined,
-    newConfig: Konva.RectConfig,
+    newConfig: Konva.Text,
     shapeType: ShapeTypes
   ) => void;
 

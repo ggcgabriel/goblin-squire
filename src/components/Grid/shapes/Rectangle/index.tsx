@@ -26,11 +26,21 @@ function Rectangle(props: RectangleProps) {
   }, [isSelected, shapeProps.id]);
 
   const onSelect = useCallback(() => {
-    selectShape(shapeProps.id, shapeProps, 'rectangle');
+    if (shapeRef.current) {
+      selectShape(shapeProps.id, shapeRef.current, 'rectangle');
+    }
   }, [selectShape, shapeProps]);
 
-  const updateRectangle = (newConfig: Konva.RectConfig) => {
-    updateShape(shapeProps.id, newConfig, 'rectangle');
+  const updateRectangle = (newConfig: {
+    x: number;
+    y: number;
+    width?: number;
+    height?: number;
+  }) => {
+    if (shapeRef.current) {
+      shapeRef.current.setAttrs(newConfig);
+      updateShape(shapeProps.id, shapeRef.current, 'rectangle');
+    }
   };
 
   useEffect(() => {
@@ -61,12 +71,10 @@ function Rectangle(props: RectangleProps) {
         {...shapeProps}
         draggable
         onDragStart={(e) => {
-          e.target.moveToTop();
           onSelect();
         }}
         onDragEnd={(e) => {
           updateRectangle({
-            ...shapeProps,
             x: !isAltPressed
               ? Math.round(e.target.x() / 65) * 65
               : e.target.x(),
@@ -90,7 +98,6 @@ function Rectangle(props: RectangleProps) {
             node.scaleX(1);
             node.scaleY(1);
             updateRectangle({
-              ...shapeProps,
               x: node.x(),
               y: node.y(),
               // set minimal value

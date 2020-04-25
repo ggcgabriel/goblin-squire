@@ -1,28 +1,28 @@
 import Konva from 'konva';
 import { ShapeTypes } from '../../../../store/ducks/editor';
 
-export type CircleShapeProps = Konva.CircleConfig;
+export type ImageShapeProps = Konva.ImageConfig;
 
-export type CircleOnChangeEvent = {
+export type ImageOnChangeEvent = {
   x: number;
   y: number;
   width?: number;
   height?: number;
-} & CircleShapeProps;
+} & ImageShapeProps;
 
-export type CircleProps = {
+export type ImageProps = {
   selectShape: (
     shapeId: string | undefined,
-    config: Konva.Circle,
+    config: Konva.Image,
     shapeType: ShapeTypes
   ) => void;
   updateShape: (
     shapeId: string | undefined,
-    newConfig: Konva.Circle,
+    newConfig: Konva.Image,
     shapeType: ShapeTypes
   ) => void;
 
   deleteShape: (shapeId: string | undefined, shapeType: ShapeTypes) => void;
   isSelected: (shapeId: string | undefined) => boolean;
-  shapeProps: CircleShapeProps;
+  shapeProps: ImageShapeProps;
 };

@@ -26,11 +26,21 @@ function Circle(props: CircleProps) {
   }, [isSelected, shapeProps.id]);
 
   const onSelect = useCallback(() => {
-    selectShape(shapeProps.id, shapeProps, 'circle');
+    if (shapeRef.current) {
+      selectShape(shapeProps.id, shapeRef.current, 'circle');
+    }
   }, [selectShape, shapeProps]);
 
-  const updateCircle = (newConfig: Konva.CircleConfig) => {
-    updateShape(shapeProps.id, newConfig, 'circle');
+  const updateCircle = (newConfig: {
+    x: number;
+    y: number;
+    width?: number;
+    height?: number;
+  }) => {
+    if (shapeRef.current) {
+      shapeRef.current.setAttrs(newConfig);
+      updateShape(shapeProps.id, shapeRef.current, 'circle');
+    }
   };
 
   useEffect(() => {
@@ -61,12 +71,10 @@ function Circle(props: CircleProps) {
         {...shapeProps}
         draggable
         onDragStart={(e) => {
-          e.target.moveToTop();
           onSelect();
         }}
         onDragEnd={(e) => {
           updateCircle({
-            ...shapeProps,
             x: !isAltPressed
               ? Math.round(e.target.x() / 65) * 65
               : e.target.x(),
@@ -90,7 +98,6 @@ function Circle(props: CircleProps) {
             node.scaleX(1);
             node.scaleY(1);
             updateCircle({
-              ...shapeProps,
               x: node.x(),
               y: node.y(),
               // set minimal value

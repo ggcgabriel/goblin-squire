@@ -1646,6 +1646,11 @@
     "@types/testing-library__dom" "*"
     pretty-format "^25.1.0"
 
+"@types/uuid@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-7.0.2.tgz#d680a9c596ef84abf5c4c07a32ffd66d582526f8"
+  integrity sha512-8Ly3zIPTnT0/8RCU6Kg/G3uTICf9sRwYOpUzSIM3503tLIKcnJPRuinHhXngJUy2MntrEf6dlpOHXJju90Qh5w==
+
 "@types/webfontloader@^1.6.29":
   version "1.6.29"
   resolved "https://registry.yarnpkg.com/@types/webfontloader/-/webfontloader-1.6.29.tgz#c6b5f6eb8ca31d0aae6b02b6c1300349dd93ea8e"
@@ -4297,10 +4302,10 @@ dotenv@^5.0.1:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
   integrity sha512-4As8uPrjfwb7VXC+WnLCbXK7y+Ueb2B3zgNCePYfhxS1PYeaO1YTeplffTEcbfLhvFNGLAz90VvJs9yomG7bow==
 
-dreampact@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/dreampact/-/dreampact-0.1.6.tgz#397efe8a55fa7f3eb456a94ca54157f2a3c99c6b"
-  integrity sha512-3Yc3wrhqEOK7qc1sqI2n6Qu8lAIuQkoTbPEQ5wUu2A4k0qFJbJhwvl//1tFPxt99oXBLjbSuyk5aG72RpUw7lA==
+dreampact@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/dreampact/-/dreampact-0.1.10.tgz#5368db05522ad2c3ecd7f5f43f07e769d98f795d"
+  integrity sha512-n0vRrg1v+wzcPbL7lmHIKR1J4AXgmAUBuGZD1UikHkb1MUIoJW244apqmn7wDxxX5ztDJoIxVScgaa6appMGeQ==
   dependencies:
     "@testing-library/jest-dom" "^4.2.4"
     "@testing-library/react" "^9.3.2"
@@ -12404,6 +12409,11 @@ uuid@^3.0.0, uuid@^3.0.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 uuid@~3.1.0:
   version "3.1.0"

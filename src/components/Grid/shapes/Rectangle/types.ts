@@ -13,12 +13,12 @@ export type RectangleOnChangeEvent = {
 export type RectangleProps = {
   selectShape: (
     shapeId: string | undefined,
-    config: Konva.RectConfig,
+    config: Konva.Rect,
     shapeType: ShapeTypes
   ) => void;
   updateShape: (
     shapeId: string | undefined,
-    newConfig: Konva.RectConfig,
+    newConfig: Konva.Rect,
     shapeType: ShapeTypes
   ) => void;
 

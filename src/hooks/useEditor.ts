@@ -13,9 +13,7 @@ const useEditor = () => {
   const {
     selectedNode: selectedShape,
     isEditing,
-    grid: {
-      nodes: { circles, rectangles, texts },
-    },
+    grid: { nodes },
   } = useSelector<ApplicationState, EditorState>((state) => state.editor);
 
   const toggleIsEditing = useCallback(() => {
@@ -27,19 +25,27 @@ const useEditor = () => {
       return (
         selectedShape !== undefined &&
         shapeId !== undefined &&
-        selectedShape.config.id === shapeId
+        selectedShape.config.id() === shapeId
       );
     },
     [selectedShape]
   );
 
+  const addShape = useCallback(
+    (config: Konva.Shape, shapeType: ShapeTypes) => {
+      dispatch(Creators.addShape(config, shapeType));
+    },
+    [dispatch]
+  );
+
   const selectShape = useCallback(
     (
       shapeId: string | undefined,
-      config: Konva.RectConfig,
-      shapeType: ShapeTypes
+      config: Konva.Shape,
+      shapeType: ShapeTypes,
+      force = false
     ) => {
-      if (shapeId && !isSelected(shapeId)) {
+      if ((shapeId && !isSelected(shapeId)) || force) {
         dispatch(Creators.setSelectedNode(config, shapeType));
       }
     },
@@ -49,34 +55,40 @@ const useEditor = () => {
   const updateShape = useCallback(
     (
       shapeId: string | undefined,
-      newConfig: Konva.RectConfig,
+      newConfig: Konva.Shape,
       shapeType: ShapeTypes
     ) => {
       if (shapeId && isSelected(shapeId)) {
         dispatch(Creators.updateShape(shapeId, shapeType, newConfig));
+        selectShape(shapeId, newConfig, shapeType, true);
       }
     },
-    [dispatch, isSelected]
-  );
-
-  const deleteShape = useCallback(
-    (shapeId: string | undefined, shapeType: ShapeTypes) => {
-      if (shapeId) {
-        dispatch(Creators.removeShape(shapeId, shapeType));
-      }
-    },
-    [dispatch]
+    [dispatch, isSelected, selectShape]
   );
 
   const unselectShape = useCallback(() => {
     dispatch(Creators.setSelectedNode(null));
   }, [dispatch]);
 
+  const deleteShape = useCallback(
+    (shapeId: string | undefined, shapeType: ShapeTypes) => {
+      if (shapeId) {
+        if (isSelected(shapeId)) {
+          unselectShape();
+        }
+
+        dispatch(Creators.removeShape(shapeId, shapeType));
+      }
+    },
+    [dispatch, unselectShape, isSelected]
+  );
+
   return {
     isEditing,
     toggleIsEditing,
-    nodes: { circles, rectangles, texts },
+    nodes,
     isSelected,
+    addShape,
     selectShape,
     updateShape,
     deleteShape,

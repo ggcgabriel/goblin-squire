@@ -1,7 +1,16 @@
 import { theme } from 'dreampact';
+import { LocalTheme } from '../types';
 
-const lightAppTheme = {
+const lightAppTheme: LocalTheme = {
   app: {
+    editor: {
+      sidebar: {
+        background: '#fff',
+        border: '#404040',
+        color: '#404040',
+        colorHover: '#000',
+      },
+    },
     toolbar: {
       background: '#fff',
       border: '#404040',

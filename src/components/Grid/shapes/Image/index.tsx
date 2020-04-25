@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, memo, useMemo, useCallback } from 'react';
-import { Text as KonvaText, Transformer } from 'react-konva';
+import { Image as KonvaImage, Transformer } from 'react-konva';
 import { useKeyPress } from 'dreampact';
 
 import Konva from 'konva';
 
-import { TextProps } from './types';
+import { ImageProps } from './types';
 
-function Text(props: TextProps) {
+function Image(props: ImageProps) {
   const {
     shapeProps,
     isSelected,
@@ -15,9 +15,10 @@ function Text(props: TextProps) {
     updateShape,
   } = props;
 
+  const isAltPressed = useKeyPress('Alt');
   const isDeletePressed = useKeyPress('Delete');
 
-  const shapeRef = useRef<Konva.Text>(null);
+  const shapeRef = useRef<Konva.Image>(null);
   const trRef = useRef<Konva.Transformer>(null);
 
   const selected = useMemo(() => {
@@ -26,11 +27,11 @@ function Text(props: TextProps) {
 
   const onSelect = useCallback(() => {
     if (shapeRef.current) {
-      selectShape(shapeProps.id, shapeRef.current, 'text');
+      selectShape(shapeProps.id, shapeRef.current, 'image');
     }
   }, [selectShape, shapeProps]);
 
-  const updateText = (newConfig: {
+  const updateImage = (newConfig: {
     x: number;
     y: number;
     width?: number;
@@ -38,7 +39,7 @@ function Text(props: TextProps) {
   }) => {
     if (shapeRef.current) {
       shapeRef.current.setAttrs(newConfig);
-      updateShape(shapeProps.id, shapeRef.current, 'text');
+      updateShape(shapeProps.id, shapeRef.current, 'image');
     }
   };
 
@@ -57,13 +58,13 @@ function Text(props: TextProps) {
 
   useEffect(() => {
     if (selected && isDeletePressed) {
-      deleteShape(shapeProps.id, 'text');
+      deleteShape(shapeProps.id, 'image');
     }
   }, [selected, isDeletePressed, deleteShape, shapeProps]);
 
   return (
     <>
-      <KonvaText
+      <KonvaImage
         onClick={onSelect}
         onTap={onSelect}
         ref={shapeRef}
@@ -73,9 +74,13 @@ function Text(props: TextProps) {
           onSelect();
         }}
         onDragEnd={(e) => {
-          updateText({
-            x: e.target.x(),
-            y: e.target.y(),
+          updateImage({
+            x: !isAltPressed
+              ? Math.round(e.target.x() / 65) * 65
+              : e.target.x(),
+            y: !isAltPressed
+              ? Math.round(e.target.y() / 65) * 65
+              : e.target.y(),
           });
         }}
         onTransformEnd={(e) => {
@@ -92,8 +97,7 @@ function Text(props: TextProps) {
 
             node.scaleX(1);
             node.scaleY(1);
-
-            updateText({
+            updateImage({
               x: node.x(),
               y: node.y(),
               // set minimal value
@@ -106,11 +110,17 @@ function Text(props: TextProps) {
       {selected && (
         <Transformer
           ref={trRef}
-          enabledAnchors={['middle-left', 'middle-right']}
+          boundBoxFunc={(oldBox, newBox) => {
+            // limit resize
+            if (newBox.width < 5 || newBox.height < 5) {
+              return oldBox;
+            }
+            return newBox;
+          }}
         />
       )}
     </>
   );
 }
 
-export default memo(Text);
+export default memo(Image);

@@ -2,10 +2,14 @@ import React, { useEffect, useState, memo } from 'react';
 
 import { Layer, Line } from 'react-konva';
 
+import { v4 } from 'uuid';
+
 import Konva from 'konva';
 
 function GridLayer() {
   const [lines, setLines] = useState<Konva.LineConfig[]>([]);
+
+  const lineColor = '#dddddd6b';
 
   useEffect(() => {
     const layerLines = [];
@@ -22,7 +26,7 @@ function GridLayer() {
           Math.round(i * padding) + 0.5,
           height,
         ],
-        stroke: '#ddd',
+        stroke: lineColor,
         strokeWidth: 1,
       });
     }
@@ -31,7 +35,7 @@ function GridLayer() {
     for (let i = 0; i < height / padding; i++) {
       layerLines.push({
         points: [0, Math.round(i * padding), width, Math.round(i * padding)],
-        stroke: '#ddd',
+        stroke: lineColor,
         strokeWidth: 1,
       });
     }
@@ -44,7 +48,7 @@ function GridLayer() {
   return (
     <Layer>
       {lines.map((line) => (
-        <Line key={Math.random()} {...line} />
+        <Line key={v4()} {...line} />
       ))}
     </Layer>
   );

@@ -31,7 +31,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "dreampact": "^0.1.6",
+    "dreampact": "^0.1.10",
     "global": "^4.4.0",
     "konva": "^4.2.2",
     "react": "^16.13.1",
@@ -44,6 +44,7 @@
     "reduxsauce": "^1.1.2",
     "styled-components": "^5.1.0",
     "typescript": "~3.7.2",
+    "uuid": "^7.0.3",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
     "@types/react-router-dom": "^5.1.4",
     "@types/redux": "^3.6.0",
     "@types/styled-components": "^5.0.1",
+    "@types/uuid": "^7.0.2",
     "@types/webfontloader": "^1.6.29",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",

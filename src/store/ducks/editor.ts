@@ -2,18 +2,19 @@ import { createActions, createReducer } from 'reduxsauce';
 import { Action } from 'redux';
 import Konva from 'konva';
 
-export type ShapeTypes = 'circle' | 'rectangle' | 'text';
+export type ShapeTypes = 'circle' | 'rectangle' | 'text' | 'image';
 export type EditorState = {
   isEditing: boolean;
   selectedNode?: {
     shapeType: ShapeTypes;
-    config: Konva.ShapeConfig;
+    config: Konva.Shape;
   };
   grid: {
     nodes: {
-      rectangles: Konva.RectConfig[];
-      circles: Konva.CircleConfig[];
-      texts: Konva.TextConfig[];
+      rectangles: Konva.Rect[];
+      circles: Konva.Circle[];
+      texts: Konva.Text[];
+      images: Konva.Image[];
     };
   };
 };
@@ -27,6 +28,7 @@ const INITIAL_STATE: EditorState = {
       rectangles: [],
       circles: [],
       texts: [],
+      images: [],
     },
   },
 };
@@ -47,22 +49,22 @@ type Types = {
 type Creators = {
   setIsEditing: (isEditing: boolean) => EditorState;
   setSelectedNode: (
-    config: Konva.ShapeConfig | null,
+    config: Konva.Shape | null,
     shapeType?: ShapeTypes
   ) => EditorState;
-  addShape: (config: Konva.ShapeConfig, shapeType: ShapeTypes) => EditorState;
+  addShape: (config: Konva.Shape, shapeType: ShapeTypes) => EditorState;
   removeShape: (nodeId: string, shapeType: ShapeTypes) => EditorState;
   updateShape: (
     nodeId: string,
     shapeType: ShapeTypes,
-    config: Konva.ShapeConfig
+    config: Konva.Shape
   ) => EditorState;
   toggleEditing: () => EditorState;
 };
 
 type ActionType = Action & {
   isEditing?: boolean;
-  config?: Konva.ShapeConfig;
+  config?: Konva.Shape;
   nodeId?: string;
   shapeType?: ShapeTypes;
 };
@@ -89,10 +91,7 @@ const addShape = (state = INITIAL_STATE, action: ActionType): EditorState => {
       grid: {
         nodes: {
           ...state.grid.nodes,
-          circles: [
-            ...state.grid.nodes.circles,
-            action.config as Konva.CircleConfig,
-          ],
+          circles: [...state.grid.nodes.circles, action.config as Konva.Circle],
         },
       },
     };
@@ -105,8 +104,20 @@ const addShape = (state = INITIAL_STATE, action: ActionType): EditorState => {
           ...state.grid.nodes,
           rectangles: [
             ...state.grid.nodes.rectangles,
-            action.config as Konva.RectConfig,
+            action.config as Konva.Rect,
           ],
+        },
+      },
+    };
+  }
+
+  if (action.shapeType === 'image') {
+    return {
+      ...state,
+      grid: {
+        nodes: {
+          ...state.grid.nodes,
+          images: [...state.grid.nodes.images, action.config as Konva.Image],
         },
       },
     };
@@ -117,7 +128,7 @@ const addShape = (state = INITIAL_STATE, action: ActionType): EditorState => {
     grid: {
       nodes: {
         ...state.grid.nodes,
-        texts: [...state.grid.nodes.texts, action.config as Konva.TextConfig],
+        texts: [...state.grid.nodes.texts, action.config as Konva.Text],
       },
     },
   };
@@ -134,7 +145,7 @@ const removeShape = (
         nodes: {
           ...state.grid.nodes,
           circles: state.grid.nodes.circles.filter(
-            (c) => c.id !== action.nodeId
+            (c) => c.id() !== action.nodeId
           ),
         },
       },
@@ -147,7 +158,21 @@ const removeShape = (
         nodes: {
           ...state.grid.nodes,
           rectangles: state.grid.nodes.rectangles.filter(
-            (c) => c.id !== action.nodeId
+            (c) => c.id() !== action.nodeId
+          ),
+        },
+      },
+    };
+  }
+
+  if (action.shapeType === 'image') {
+    return {
+      ...state,
+      grid: {
+        nodes: {
+          ...state.grid.nodes,
+          images: state.grid.nodes.images.filter(
+            (c) => c.id() !== action.nodeId
           ),
         },
       },
@@ -159,7 +184,7 @@ const removeShape = (
     grid: {
       nodes: {
         ...state.grid.nodes,
-        texts: state.grid.nodes.texts.filter((c) => c.id !== action.nodeId),
+        texts: state.grid.nodes.texts.filter((c) => c.id() !== action.nodeId),
       },
     },
   };
@@ -176,8 +201,8 @@ const updateShape = (
         nodes: {
           ...state.grid.nodes,
           circles: [
-            ...state.grid.nodes.circles.filter((c) => c.id !== action.nodeId),
-            action.config as Konva.CircleConfig,
+            ...state.grid.nodes.circles.filter((c) => c.id() !== action.nodeId),
+            action.config as Konva.Circle,
           ],
         },
       },
@@ -191,9 +216,24 @@ const updateShape = (
           ...state.grid.nodes,
           rectangles: [
             ...state.grid.nodes.rectangles.filter(
-              (c) => c.id !== action.nodeId
+              (c) => c.id() !== action.nodeId
             ),
-            action.config as Konva.RectConfig,
+            action.config as Konva.Rect,
+          ],
+        },
+      },
+    };
+  }
+
+  if (action.shapeType === 'image') {
+    return {
+      ...state,
+      grid: {
+        nodes: {
+          ...state.grid.nodes,
+          images: [
+            ...state.grid.nodes.images.filter((c) => c.id() !== action.nodeId),
+            action.config as Konva.Image,
           ],
         },
       },
@@ -206,8 +246,8 @@ const updateShape = (
       nodes: {
         ...state.grid.nodes,
         texts: [
-          ...state.grid.nodes.texts.filter((c) => c.id !== action.nodeId),
-          action.config as Konva.TextConfig,
+          ...state.grid.nodes.texts.filter((c) => c.id() !== action.nodeId),
+          action.config as Konva.Text,
         ],
       },
     },
@@ -233,7 +273,7 @@ const setSelectedNode = (
     selectedNode:
       action.config != null
         ? {
-            config: action.config as Konva.ShapeConfig,
+            config: action.config as Konva.Shape,
             shapeType: action.shapeType as ShapeTypes,
           }
         : undefined,

@@ -1,14 +1,16 @@
-import RubikIcon from '../../icons/Rubik';
-import CircleIcon from '../../icons/Circle';
-import TextIcon from '../../icons/Text';
+import RubikIcon from '../icons/Rubik';
+import CircleIcon from '../icons/Circle';
+import TextIcon from '../icons/Text';
 
-import { ReactComponent as MoonSvg } from '../../icons/svg/moon.svg';
-import { ReactComponent as SunSvg } from '../../icons/svg/sun.svg';
+import { ReactComponent as MoonSvg } from '../icons/svg/moon.svg';
+import { ReactComponent as SunSvg } from '../icons/svg/sun.svg';
+import { ReactComponent as ImageSvg } from '../icons/svg/image.svg';
 
 type DispatchEvents = {
   handleAddRectangle: () => void;
   handleAddCircle: () => void;
   handleAddText: () => void;
+  handleAddImage: () => void;
   handleToggleTheme: () => void;
 };
 
@@ -18,6 +20,7 @@ export const toolbarItems = (
     handleAddCircle,
     handleAddRectangle,
     handleAddText,
+    handleAddImage,
     handleToggleTheme,
   }: DispatchEvents
 ) => [
@@ -35,6 +38,11 @@ export const toolbarItems = (
     icon: TextIcon,
     tooltip: 'Add new Text',
     onClick: handleAddText,
+  },
+  {
+    icon: ImageSvg,
+    tooltip: 'Add new Image',
+    onClick: handleAddImage,
   },
   {
     icon: isDarkTheme ? SunSvg : MoonSvg,

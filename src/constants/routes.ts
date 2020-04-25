@@ -1,3 +1,5 @@
+import { v4 } from 'uuid';
+
 import { Editor } from '../pages';
 
 export const paths = {
@@ -7,7 +9,7 @@ export const paths = {
 
 export const routes = [
   {
-    key: Math.random(),
+    key: v4(),
     path: paths.editor,
     exact: true,
     component: Editor,

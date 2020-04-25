@@ -6,7 +6,7 @@ import { CssReset } from 'dreampact';
 
 import GlobalStyle from './components/GlobalStyle';
 
-import useTheme from './hooks/useTheme';
+import { useTheme } from './hooks';
 
 import Routes from './Routes';
 

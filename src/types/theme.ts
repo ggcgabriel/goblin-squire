@@ -1,7 +1,15 @@
 import { Theme } from 'dreampact';
 
-export type AppTheme = Theme & {
+export type LocalTheme = {
   app: {
+    editor: {
+      sidebar: {
+        background: string;
+        border: string;
+        color: string;
+        colorHover: string;
+      };
+    };
     toolbar: {
       background: string;
       border: string;
@@ -16,3 +24,5 @@ export type AppTheme = Theme & {
     };
   };
 };
+
+export type AppTheme = Theme & LocalTheme;
